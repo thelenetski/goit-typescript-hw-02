@@ -1,0 +1,19 @@
+.loadBtn {
+  margin-bottom: 30px;
+}
+
+.loadBtn button {
+  color: #fff;
+  background-color: rgb(109, 165, 211);
+  box-shadow: 0px 5px 5px #00000040;
+  transition: 0.3s;
+}
+
+.loadBtn button:hover {
+  background-color: rgb(90, 136, 173);
+  border-color: #3473a7;
+}
+
+.loadBtn button:focus {
+  outline: none;
+}

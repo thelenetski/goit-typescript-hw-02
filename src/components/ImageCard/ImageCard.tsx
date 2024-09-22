@@ -1,30 +1,10 @@
 import { forwardRef, useRef, useEffect } from "react";
 import css from "./ImageCard.module.css";
-
-interface ImgDataTypes {
-  urls: {
-    regular: string;
-    small: string;
-  };
-  alt_description: string;
-  description: string;
-  user: {
-    name: string;
-  };
-  likes: number;
-}
-
-interface ModalTypes {
-  isOpen: boolean;
-  url: string;
-  alt: string;
-  descr: string;
-  author: string;
-  likes: number;
-}
+import { Image } from "../../App";
+import { ModalTypes } from "../../App";
 
 type Props = {
-  imgData: ImgDataTypes;
+  imgData: Image;
   onModal: ({ url, alt, descr, author, likes }: ModalTypes) => void;
 };
 

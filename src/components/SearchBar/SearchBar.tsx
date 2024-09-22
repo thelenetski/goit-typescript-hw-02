@@ -3,18 +3,11 @@ import { FaSearch } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
 import { FormEvent } from "react";
 
-interface ImgDataTypes {
-  total: number;
-  total_pages: number;
-  results: [];
-}
-
 type Props = {
   onSubmit: (querry: string) => void;
-  data: ImgDataTypes | null;
 };
 
-const SearchBar = ({ onSubmit, data }: Props) => {
+const SearchBar = ({ onSubmit }: Props) => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
@@ -46,12 +39,6 @@ const SearchBar = ({ onSubmit, data }: Props) => {
           <FaSearch />
         </button>
       </form>
-      {data && data.total_pages > 0 && (
-        <div className={css.info}>
-          <p>{`Images: ${data.total}`}</p>
-          <p>{`Pages: ${data.total_pages}`}</p>
-        </div>
-      )}
     </header>
   );
 };

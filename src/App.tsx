@@ -10,13 +10,27 @@ import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import { AiOutlinePicture } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
 
+export interface Image {
+  id: string;
+  urls: {
+    regular: string;
+    small: string;
+  };
+  alt_description: string;
+  description: string;
+  user: {
+    name: string;
+  };
+  likes: number;
+}
+
 interface ImgDataTypes {
   total: number;
   total_pages: number;
-  results: [];
+  results: Image[];
 }
 
-type ModalTypes = {
+export type ModalTypes = {
   isOpen: boolean;
   url: string;
   alt: string;
@@ -27,7 +41,8 @@ type ModalTypes = {
 
 function App() {
   const [search, setSearch] = useState<string>("");
-  const [imgData, setImgData] = useState<ImgDataTypes | null>(null);
+  const [imgData, setImgData] = useState<Image[]>([]);
+  const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [loadMoreBtnState, setLoadMoreBtnState] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -70,13 +85,15 @@ function App() {
 
       dataRequest()
         .then((data: ImgDataTypes): void => {
-          setImgData((prev): ImgDataTypes => {
-            return {
-              total: data.total,
-              total_pages: data.total_pages,
-              results: [...(prev?.results ?? []), ...data.results],
-            };
-          });
+          setImgData((prev) => [...prev, ...data.results]);
+          setTotal(data.total);
+          // setImgData((prev) => {
+          //   return {
+          //     total: data.total,
+          //     total_pages: data.total_pages,
+          //     results: [...(prev?.results ?? []), ...data.results],
+          //   };
+          // });
 
           if (data.total === 0)
             setErrorMsg("Nothing was found for your request");
@@ -103,12 +120,14 @@ function App() {
     }
     setCurrentPage(1);
     setLoadMoreBtnState(false);
-    setImgData({
-      total: imgData?.total ?? 0,
-      total_pages: imgData?.total_pages ?? 0,
-      results: [],
-    });
+    // setImgData({
+    //   total: imgData?.total ?? 0,
+    //   total_pages: imgData?.total_pages ?? 0,
+    //   results: [],
+    // });
     setSearch(searchRequest);
+    setImgData([]);
+    setTotal(0);
   };
 
   const handleLoadMore = (): void => {
@@ -159,13 +178,11 @@ function App() {
 
   return (
     <>
-      <SearchBar onSubmit={handleSearch} data={imgData} />
+      <SearchBar onSubmit={handleSearch} />
       <div style={{ width: "100%", height: "120px" }}></div>
       <Toaster position="top-left" reverseOrder={true} />
-      {imgData?.total && !(imgData.total > 0) && (
-        <AiOutlinePicture className="bgIcon" />
-      )}
-      {imgData?.total && imgData.total > 0 && (
+      {!(total > 0) && <AiOutlinePicture className="bgIcon" />}
+      {total > 0 && (
         <ImageGallery
           lastImageRef={galleryRef}
           data={imgData}
